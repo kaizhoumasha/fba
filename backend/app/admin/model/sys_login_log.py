@@ -3,7 +3,11 @@
 from datetime import datetime
 
 from sqlalchemy import String
-from sqlalchemy.dialects.mysql import LONGTEXT
+from backend.core.conf import settings
+if(settings.SQL_TYPE == 'mysql'):
+    from sqlalchemy.dialects.mysql import LONGTEXT
+elif(settings.SQL_TYPE == 'postgres'):
+    from sqlalchemy.dialects.postgresql import TEXT as LONGTEXT
 from sqlalchemy.orm import Mapped, mapped_column
 
 from backend.common.model import DataClassBase, id_key

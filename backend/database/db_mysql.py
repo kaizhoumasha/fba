@@ -12,6 +12,8 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from backend.common.log import log
 from backend.common.model import MappedBase
 from backend.core.conf import settings
+from pydantic import AnyUrl, SecretStr
+from typing import Optional
 
 
 def create_engine_and_session(url: str | URL):
@@ -26,13 +28,45 @@ def create_engine_and_session(url: str | URL):
         db_session = async_sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
         return engine, db_session
 
+def build_database_uri(scheme: str, username: str, password: str, host: str, port: int, path: str) -> AnyUrl:
+    try:
+        return str(AnyUrl.build(
+            scheme=scheme,
+            username=username,
+            password=password,
+            host=host,
+            port=port,
+            path=f'{path}',
+        ))
+    except Exception as e:
+        raise ValueError(f"Failed to build database URI: {e}")
 
-SQLALCHEMY_DATABASE_URL = (
-    f'mysql+asyncmy://{settings.MYSQL_USER}:{settings.MYSQL_PASSWORD}@{settings.MYSQL_HOST}:'
-    f'{settings.MYSQL_PORT}/{settings.MYSQL_DATABASE}?charset={settings.MYSQL_CHARSET}'
-)
+def get_sql_url() -> Optional[AnyUrl]:
+    sql_url = None
+    if settings.SQL_TYPE == 'mysql':
+        # MySQL
+        sql_url = build_database_uri(
+            scheme=settings.SQL_SCHEME,
+            username=settings.SQL_USER,
+            password=settings.SQL_PASSWORD,
+            host=settings.SQL_HOST,
+            port=settings.SQL_PORT,
+            path=settings.SQL_DATABASE,
+        )
+    elif settings.SQL_TYPE == 'postgres':
+        # PostgreSQL
+        sql_url = build_database_uri(
+            scheme="postgresql+psycopg",
+            username=settings.SQL_USER,
+            password=settings.SQL_PASSWORD,
+            host=settings.SQL_HOST,
+            port=settings.SQL_PORT,
+            path=settings.SQL_DATABASE,
+        )
+    return sql_url
 
-async_engine, async_db_session = create_engine_and_session(SQLALCHEMY_DATABASE_URL)
+
+async_engine, async_db_session = create_engine_and_session(get_sql_url())
 
 
 async def get_db() -> AsyncSession:

@@ -17,11 +17,17 @@ class Settings(BaseSettings):
     # Env Config
     ENVIRONMENT: Literal['dev', 'pro']
 
-    # Env MySQL
-    MYSQL_HOST: str
-    MYSQL_PORT: int
-    MYSQL_USER: str
-    MYSQL_PASSWORD: str
+    EXEC_PORT: int = 8000
+    SQL_TYPE: Literal['mysql', 'postgres'] = 'mysql'
+    # Env SQL
+    SQL_SCHEME: Literal['mysql+asyncmy', 'postgresql+psycopg'] = 'mysql+asyncmy'
+    SQL_HOST: str
+    SQL_PORT: int
+    SQL_USER: str
+    SQL_PASSWORD: str
+    SQL_DATABASE: str = 'fba'
+    SQL_ECHO: bool = False
+    MYSQL_CHARSET: str = 'utf8mb4'
 
     # Env Redis
     REDIS_HOST: str
