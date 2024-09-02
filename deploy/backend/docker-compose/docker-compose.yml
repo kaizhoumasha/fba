@@ -47,7 +47,7 @@ services:
   fba_mysql:
     image: mysql:8.0.29
     ports:
-      - "${DOCKER_MYSQL_MAP_PORT:-3306}:3306"
+      - "${DOCKER_MYSQL_MAP_PORT:-13306}:3306"
     container_name: fba_mysql
     restart: always
     environment:
@@ -67,7 +67,7 @@ services:
   fba_redis:
     image: redis:6.2.7
     ports:
-      - "${DOCKER_REDIS_MAP_PORT:-6379}:6379"
+      - "${DOCKER_REDIS_MAP_PORT:-16379}:6379"
     container_name: fba_redis
     restart: always
     environment:
