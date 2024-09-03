@@ -82,7 +82,7 @@ services:
   fba_nginx:
     image: nginx
     ports:
-      - "8000:80"
+      - "8888:80"
     container_name: fba_nginx
     restart: always
     depends_on:
