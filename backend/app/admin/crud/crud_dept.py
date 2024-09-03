@@ -19,8 +19,9 @@ class CRUDDept(CRUDPlus[Dept]):
         :param db:
         :param dept_id:
         :return:
+        :TODO: del_flag目前是POSTGRES，MYSQL需要验证
         """
-        return await self.select_model_by_column(db, id=dept_id, del_flag=0)
+        return await self.select_model_by_column(db, id=dept_id, del_flag=False)
 
     async def get_by_name(self, db: AsyncSession, name: str) -> Dept | None:
         """
@@ -30,7 +31,7 @@ class CRUDDept(CRUDPlus[Dept]):
         :param name:
         :return:
         """
-        return await self.select_model_by_column(db, name=name, del_flag=0)
+        return await self.select_model_by_column(db, name=name, del_flag=False)
 
     async def get_all(
         self, db: AsyncSession, name: str = None, leader: str = None, phone: str = None, status: int = None
@@ -44,8 +45,9 @@ class CRUDDept(CRUDPlus[Dept]):
         :param phone:
         :param status:
         :return:
+        :TODO: del_flag目前是POSTGRES，MYSQL需要验证
         """
-        filters = {'del_flag__eq': 0}
+        filters = {'del_flag__eq': False}
         if name is not None:
             filters.update(name__like=f'%{name}%')
         if leader is not None:

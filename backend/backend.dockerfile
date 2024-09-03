@@ -21,6 +21,6 @@ RUN mkdir -p /var/log/fastapi_server
 
 COPY deploy/backend/fastapi_server.conf /etc/supervisor/conf.d/
 
-EXPOSE 8001
+EXPOSE 8888
 
-CMD ["uvicorn", "backend.main:app", "--host", "127.0.0.1", "--port", "8000"]
+CMD ["uvicorn", "backend.main:app", "--host", "127.0.0.1", "--port", "8888"]

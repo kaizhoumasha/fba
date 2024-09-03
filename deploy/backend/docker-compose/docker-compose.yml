@@ -39,7 +39,7 @@ services:
       - bash
       - -c
       - |
-        wait-for-it -s fba_mysql:3306 -s fba_redis:6379 -t 300
+        wait-for-it -s fba_mysql:13306 -s fba_redis:16379 -t 300
         mkdir -p /var/log/supervisor/
         supervisord -c /fba/deploy/backend/supervisor.conf
         supervisorctl restart fastapi_server
